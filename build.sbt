@@ -27,15 +27,15 @@ val publishSettings = Seq(
   releaseCommitMessage := s"Set version to ${version.value}",
   releaseIgnoreUntrackedFiles := true,
   releaseCrossBuild := true,
-  homepage := Some(url("https://github.com/ScalaConsultants/zio-akka-http")),
+  homepage := Some(url("https://github.com/ScalaConsultants/zio-akka-http-interop")),
   licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
   scmInfo := Some(
     ScmInfo(
-      url("https://github.com/ScalaConsultants/zio-akka-http"),
-      "scm:git:git@github.com:ScalaConsultants/zio-akka-http.git"
+      url("https://github.com/ScalaConsultants/zio-akka-http-interop"),
+      "scm:git:git@github.com:ScalaConsultants/zio-akka-http-interop.git"
     )
   ),
   developers := List(
@@ -65,7 +65,7 @@ val publishSettings = Seq(
 val root = (project in file("."))
   .settings(
     organization := "io.scalac",
-    name := "zio-akka-http",
+    name := "zio-akka-http-interop",
     scalaVersion := "2.13.2",
     crossScalaVersions := Seq("2.12.11", "2.13.2"),
     scalacOptions ++= {

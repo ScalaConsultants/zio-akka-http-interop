@@ -1,13 +1,13 @@
-# zio-akka-http
+# zio-akka-http-interop
 
 Small library, that provides interop between [akka-http](https://doc.akka.io/docs/akka-http/current/index.html) and [ZIO](https://zio.dev/): you'll be able to use ZIO values in your akka-http routes instead of `Future`s
 
 ### How to use
 
-Include zio-akka-http in your build:
+Include zio-akka-http-interop in your build:
 
 ```
-libraryDependencies += "io.scalac" %% "zio-akka-http" % "<tbd>"
+libraryDependencies += "io.scalac" %% "zio-akka-http-interop" % "<tbd>"
 ```
 
 Then just mix `akka.http.interop.ZIOSupport` into the class, that defines your routes:
