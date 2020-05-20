@@ -1,6 +1,6 @@
 # zio-akka-http
 
-Small library, that provides interop between [akka-http] and [ZIO]: you'll be able to use ZIO values in your akka-http routes instead of `Future`s
+Small library, that provides interop between [akka-http](https://doc.akka.io/docs/akka-http/current/index.html) and [ZIO](https://zio.dev/): you'll be able to use ZIO values in your akka-http routes instead of `Future`s
 
 ### How to use
 
