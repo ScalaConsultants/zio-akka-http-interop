@@ -1,5 +1,7 @@
 # zio-akka-http-interop
 
+![CI](https://github.com/ScalaConsultants/zio-akka-http-interop/workflows/Scala%20CI/badge.svg)
+
 Small library, that provides interop between [akka-http](https://doc.akka.io/docs/akka-http/current/index.html) and [ZIO](https://zio.dev/): you'll be able to use ZIO values in your akka-http routes instead of `Future`s
 
 ### How to use
