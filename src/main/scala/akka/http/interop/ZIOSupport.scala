@@ -2,9 +2,9 @@ package akka.http.interop
 
 import akka.http.scaladsl.marshalling.{ Marshaller, Marshalling, PredefinedToResponseMarshallers }
 import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.server.{ RequestContext, Route, RouteResult }
 import akka.http.scaladsl.server.RouteResult.Complete
-import zio.{ BootstrapRuntime, IO }
+import akka.http.scaladsl.server.{ RequestContext, Route, RouteResult }
+import zio.{ BootstrapRuntime, IO, UIO }
 
 import scala.concurrent.{ Future, Promise }
 import scala.language.implicitConversions
@@ -12,8 +12,24 @@ import scala.language.implicitConversions
 /**
  * Provides support for ZIO values in akka-http routes
  */
-trait ZIOSupport extends BootstrapRuntime { self =>
+trait ZIOSupport extends ZIOSupportInstances1
 
+sealed trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
+  implicit def zioSupportUIOMarshaller[A](
+    implicit ma: Marshaller[A, HttpResponse]
+  ): Marshaller[UIO[A], HttpResponse] =
+    Marshaller { implicit ec => a =>
+      val r = a.flatMap(a => IO.fromFuture(implicit ec => ma(a)))
+
+      val p = Promise[List[Marshalling[HttpResponse]]]()
+
+      unsafeRunAsync(r)(_.fold(e => p.failure(e.squash), s => p.success(s)))
+
+      p.future
+    }
+}
+
+sealed trait ZIOSupportInstances2 extends BootstrapRuntime {
   implicit def zioSupportErrorMarshaller[E: ErrorResponse]: Marshaller[E, HttpResponse] =
     Marshaller { implicit ec => a =>
       PredefinedToResponseMarshallers.fromResponse(implicitly[ErrorResponse[E]].toHttpResponse(a))
@@ -31,7 +47,7 @@ trait ZIOSupport extends BootstrapRuntime { self =>
 
       val p = Promise[List[Marshalling[HttpResponse]]]()
 
-      self.unsafeRunAsync(r)(_.fold(e => p.failure(e.squash), s => p.success(s)))
+      unsafeRunAsync(r)(_.fold(e => p.failure(e.squash), s => p.success(s)))
 
       p.future
     }
@@ -44,9 +60,8 @@ trait ZIOSupport extends BootstrapRuntime { self =>
       a => a
     )
 
-    self.unsafeRunAsync(f)(_.fold(e => p.failure(e.squash), s => p.completeWith(s.apply(ctx))))
+    unsafeRunAsync(f)(_.fold(e => p.failure(e.squash), s => p.completeWith(s.apply(ctx))))
 
     p.future
   }
-
 }

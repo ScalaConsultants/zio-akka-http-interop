@@ -17,18 +17,18 @@ object Api extends ZIOSupport {
   }
 
   val routes: Route =
-    pathPrefix("a") {
+    pathPrefix("ok") {
       get {
         val res: IO[DomainError, String] = ZIO.succeed("OK")
         complete(res)
       }
-    } ~ pathPrefix("b") {
+    } ~ pathPrefix("internal_server_error") {
       get {
         val res: IO[DomainError, String] = ZIO.fail(FatalError)
         complete(res)
       }
     } ~
-      pathPrefix("c") {
+      pathPrefix("bad_request") {
         get {
           val res: IO[DomainError, String] = ZIO.fail(BadData)
           complete(res)
