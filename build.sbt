@@ -1,9 +1,9 @@
 import ReleaseTransformations._
 import ReleasePlugin.autoImport._
 
-val zioVersion       = "1.0.0-RC19"
-val akkaVersion      = "2.6.5"
-val akkaHttpVersion  = "10.1.12"
+val zioVersion      = "1.0.0-RC19"
+val akkaVersion     = "2.6.5"
+val akkaHttpVersion = "10.1.12"
 
 val compilerOptions = Seq(
   "-deprecation",
@@ -79,6 +79,7 @@ val root = (project in file("."))
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-actor"          % akkaVersion,
+      "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
       "com.typesafe.akka" %% "akka-http"           % akkaHttpVersion,
       "dev.zio"           %% "zio"                 % zioVersion,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
