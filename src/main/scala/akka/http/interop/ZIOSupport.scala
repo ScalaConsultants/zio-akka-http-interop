@@ -14,7 +14,7 @@ import scala.language.implicitConversions
  */
 trait ZIOSupport extends ZIOSupportInstances1
 
-sealed trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
+trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
   implicit def zioSupportUIOMarshaller[A](
     implicit ma: Marshaller[A, HttpResponse]
   ): Marshaller[UIO[A], HttpResponse] =
@@ -29,7 +29,7 @@ sealed trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
     }
 }
 
-sealed trait ZIOSupportInstances2 extends BootstrapRuntime {
+trait ZIOSupportInstances2 extends BootstrapRuntime {
   implicit def zioSupportErrorMarshaller[E: ErrorResponse]: Marshaller[E, HttpResponse] =
     Marshaller { implicit ec => a =>
       PredefinedToResponseMarshallers.fromResponse(implicitly[ErrorResponse[E]].toHttpResponse(a))

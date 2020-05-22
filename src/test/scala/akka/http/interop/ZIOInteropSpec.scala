@@ -17,7 +17,9 @@ object ZIOInteropSpec extends ZIORouteTest {
       }
     } ~ pathPrefix("uio") {
       get {
-        complete(ZIO.succeed("OK"))
+        // todo: when typed as UIO it fails to compile for Scala 2.12.11
+        val res: Task[String] = ZIO.succeed("OK")
+        complete(res)
       }
     }
   }
