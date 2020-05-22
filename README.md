@@ -1,6 +1,7 @@
 # zio-akka-http-interop
 
 ![CI](https://github.com/ScalaConsultants/zio-akka-http-interop/workflows/Scala%20CI/badge.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/io.scalac/zio-akka-http-interop_2.13.svg)](https://github.com/ScalaConsultants/zio-slick-interop)
 
 Small library, that provides interop between [akka-http](https://doc.akka.io/docs/akka-http/current/index.html) and [ZIO](https://zio.dev/): you'll be able to use ZIO values in your akka-http routes instead of `Future`s
 
@@ -9,7 +10,7 @@ Small library, that provides interop between [akka-http](https://doc.akka.io/doc
 Include zio-akka-http-interop in your build:
 
 ```
-libraryDependencies += "io.scalac" %% "zio-akka-http-interop" % "<tbd>"
+libraryDependencies += "io.scalac" %% "zio-akka-http-interop" % "0.1.0"
 ```
 
 Then just mix `akka.http.interop.ZIOSupport` into the class, that defines your routes:
