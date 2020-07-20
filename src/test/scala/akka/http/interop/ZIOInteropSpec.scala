@@ -58,6 +58,12 @@ object ZIOInteropSpec extends ZIORouteTest {
           val s = status
           assert(s)(equalTo(StatusCodes.OK))
         })
+      },
+      testM("succeed on /blocking_request (no domain errors)") {
+        ZIO.effect(Get("/blocking_request") ~> domainRoutes ~> check {
+          val s = status
+          assert(s)(equalTo(StatusCodes.OK))
+        })
       }
     )
 

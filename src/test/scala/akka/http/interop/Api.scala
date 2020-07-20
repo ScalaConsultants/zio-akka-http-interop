@@ -4,6 +4,7 @@ import akka.http.scaladsl.model.{ HttpResponse, StatusCodes }
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import zio.{ IO, ZIO }
+import zio.blocking._
 
 object Api extends ZIOSupport {
 
@@ -28,10 +29,16 @@ object Api extends ZIOSupport {
         complete(res)
       }
     } ~
-      pathPrefix("bad_request") {
-        get {
-          val res: IO[DomainError, String] = ZIO.fail(BadData)
-          complete(res)
-        }
+    pathPrefix("bad_request") {
+      get {
+        val res: IO[DomainError, String] = ZIO.fail(BadData)
+        complete(res)
       }
+    } ~
+    pathPrefix("blocking_request") {
+      get {
+        val res: ZIO[Blocking, DomainError, String] = blocking(ZIO.succeed("OK"))
+        complete(res)
+      }
+    }
 }

@@ -4,7 +4,8 @@ import akka.http.scaladsl.marshalling.{ Marshaller, Marshalling, PredefinedToRes
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RouteResult.Complete
 import akka.http.scaladsl.server.{ RequestContext, Route, RouteResult }
-import zio.{ BootstrapRuntime, IO, UIO }
+import zio.{ BootstrapRuntime, ZIO, IO, UIO }
+import zio.blocking.Blocking
 
 import scala.concurrent.{ Future, Promise }
 import scala.language.implicitConversions
@@ -38,7 +39,7 @@ trait ZIOSupportInstances2 extends BootstrapRuntime {
   implicit def zioSupportIOMarshaller[A, E](
     implicit ma: Marshaller[A, HttpResponse],
     me: Marshaller[E, HttpResponse]
-  ): Marshaller[IO[E, A], HttpResponse] =
+  ): Marshaller[ZIO[Blocking, E, A], HttpResponse] =
     Marshaller { implicit ec => a =>
       val r = a.foldM(
         e => IO.fromFuture(implicit ec => me(e)),
