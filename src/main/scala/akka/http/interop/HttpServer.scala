@@ -17,7 +17,7 @@ object HttpServer {
         implicit val system: ActorSystem = sys
 
         val start: Managed[Throwable, Http.ServerBinding] =
-          ZManaged.make(ZIO.fromFuture(_ => Http().bindAndHandle(routes, cfg.host, cfg.port)))(b =>
+          ZManaged.make(ZIO.fromFuture(_ => Http().newServerAt(cfg.host, cfg.port).bind(routes)))(b =>
             ZIO.fromFuture(_ => b.unbind()).orDie
           )
       }
