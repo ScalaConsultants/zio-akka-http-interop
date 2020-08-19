@@ -10,7 +10,7 @@ Small library, that provides interop between [akka-http](https://doc.akka.io/doc
 Include zio-akka-http-interop in your build:
 
 ```
-libraryDependencies += "io.scalac" %% "zio-akka-http-interop" % "0.1.0"
+libraryDependencies += "io.scalac" %% "zio-akka-http-interop" % "0.4.0"
 ```
 
 Then just mix `akka.http.interop.ZIOSupport` into the class, that defines your routes:
