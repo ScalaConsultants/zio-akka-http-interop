@@ -82,9 +82,9 @@ val root = (project in file("."))
       "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
       "com.typesafe.akka" %% "akka-http"           % akkaHttpVersion,
       "dev.zio"           %% "zio"                 % zioVersion,
-      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion     % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion % Test,
-      "dev.zio"           %% "zio-test-sbt"        % zioVersion % Test
+      "dev.zio"           %% "zio-test-sbt"        % zioVersion      % Test
     )
   )
   .settings(publishSettings: _*)
