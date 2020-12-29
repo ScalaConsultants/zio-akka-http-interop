@@ -15,8 +15,8 @@ import scala.language.implicitConversions
 trait ZIOSupport extends ZIOSupportInstances1
 
 trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
-  implicit def zioSupportUIOMarshaller[A](
-    implicit ma: Marshaller[A, HttpResponse]
+  implicit def zioSupportUIOMarshaller[A](implicit
+    ma: Marshaller[A, HttpResponse]
   ): Marshaller[UIO[A], HttpResponse] =
     Marshaller { implicit ec => a =>
       val r = a.flatMap(a => IO.fromFuture(implicit ec => ma(a)))
@@ -35,8 +35,8 @@ trait ZIOSupportInstances2 extends BootstrapRuntime {
       PredefinedToResponseMarshallers.fromResponse(implicitly[ErrorResponse[E]].toHttpResponse(a))
     }
 
-  implicit def zioSupportIOMarshaller[A, E](
-    implicit ma: Marshaller[A, HttpResponse],
+  implicit def zioSupportIOMarshaller[A, E](implicit
+    ma: Marshaller[A, HttpResponse],
     me: Marshaller[E, HttpResponse]
   ): Marshaller[IO[E, A], HttpResponse] =
     Marshaller { implicit ec => a =>
