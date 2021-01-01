@@ -1,8 +1,8 @@
 import ReleaseTransformations._
 import ReleasePlugin.autoImport._
 
-val zioVersion      = "1.0.1"
-val akkaVersion     = "2.6.8"
+val zioVersion      = "1.0.3"
+val akkaVersion     = "2.6.10"
 val akkaHttpVersion = "10.2.2"
 
 val compilerOptions = Seq(
@@ -82,9 +82,9 @@ val root = (project in file("."))
       "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
       "com.typesafe.akka" %% "akka-http"           % akkaHttpVersion,
       "dev.zio"           %% "zio"                 % zioVersion,
-      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+      "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion     % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion % Test,
-      "dev.zio"           %% "zio-test-sbt"        % zioVersion % Test
+      "dev.zio"           %% "zio-test-sbt"        % zioVersion      % Test
     )
   )
   .settings(publishSettings: _*)
