@@ -65,8 +65,8 @@ val root = (project in file("."))
   .settings(
     organization := "io.scalac",
     name := "zio-akka-http-interop",
-    scalaVersion := "2.13.3",
-    crossScalaVersions := Seq("2.12.12", "2.13.3"),
+    scalaVersion := "2.13.5",
+    crossScalaVersions := Seq("2.12.12", "2.13.5"),
     scalacOptions ++= {
       if (priorTo2_13(scalaVersion.value)) compilerOptions
       else
