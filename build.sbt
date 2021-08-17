@@ -1,9 +1,9 @@
 import ReleaseTransformations._
 import ReleasePlugin.autoImport._
 
-val zioVersion      = "1.0.8"
-val akkaVersion     = "2.6.14"
-val akkaHttpVersion = "10.2.4"
+val zioVersion      = "1.0.10"
+val akkaVersion     = "2.6.15"
+val akkaHttpVersion = "10.2.6"
 
 val compilerOptions = Seq(
   "-deprecation",
@@ -65,8 +65,8 @@ val root = (project in file("."))
   .settings(
     organization := "io.scalac",
     name := "zio-akka-http-interop",
-    scalaVersion := "2.13.3",
-    crossScalaVersions := Seq("2.12.13", "2.13.6"),
+    scalaVersion := "2.13.6",
+    crossScalaVersions := Seq("2.12.14", "2.13.6"),
     scalacOptions ++= {
       if (priorTo2_13(scalaVersion.value)) compilerOptions
       else
@@ -78,10 +78,10 @@ val root = (project in file("."))
     },
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     libraryDependencies ++= Seq(
-      "com.typesafe.akka" %% "akka-actor"          % akkaVersion,
-      "com.typesafe.akka" %% "akka-stream"         % akkaVersion,
-      "com.typesafe.akka" %% "akka-http"           % akkaHttpVersion,
-      "dev.zio"           %% "zio"                 % zioVersion,
+      "com.typesafe.akka" %% "akka-actor"          % akkaVersion     % Provided,
+      "com.typesafe.akka" %% "akka-stream"         % akkaVersion     % Provided,
+      "com.typesafe.akka" %% "akka-http"           % akkaHttpVersion % Provided,
+      "dev.zio"           %% "zio"                 % zioVersion      % Provided,
       "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion     % Test,
       "com.typesafe.akka" %% "akka-http-testkit"   % akkaHttpVersion % Test,
       "dev.zio"           %% "zio-test-sbt"        % zioVersion      % Test
