@@ -47,6 +47,12 @@ object ZIOInteropSpec extends ZIORouteTest {
           assert(s)(equalTo(StatusCodes.BadRequest))
         })
       },
+      testM("fail with 400 on /bad_request_narrow") {
+        ZIO.effect(Get("/bad_request_narrow") ~> domainRoutes ~> check {
+          val s = status
+          assert(s)(equalTo(StatusCodes.BadRequest))
+        })
+      },
       testM("succeed fail with 500 on /task (no domain errors)") {
         ZIO.effect(Get("/task") ~> simpleRoutes ~> check {
           val s = status
