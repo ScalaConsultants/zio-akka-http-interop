@@ -3,7 +3,7 @@ import ReleasePlugin.autoImport._
 
 val zioVersion      = "1.0.10"
 val akkaVersion     = "2.6.15"
-val akkaHttpVersion = "10.2.6"
+val akkaHttpVersion = "10.2.7"
 
 val compilerOptions = Seq(
   "-deprecation",
