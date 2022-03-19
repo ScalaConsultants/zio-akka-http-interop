@@ -1,7 +1,7 @@
 import ReleaseTransformations._
 import ReleasePlugin.autoImport._
 
-val zioVersion      = "1.0.10"
+val zioVersion      = "2.0.0-RC2"
 val akkaVersion     = "2.6.15"
 val akkaHttpVersion = "10.2.6"
 

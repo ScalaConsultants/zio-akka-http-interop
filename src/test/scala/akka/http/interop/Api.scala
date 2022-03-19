@@ -1,9 +1,9 @@
 package akka.http.interop
 
-import akka.http.scaladsl.model.{ HttpResponse, StatusCodes }
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import zio.{ IO, ZIO }
+import zio.{IO, ZIO}
 
 object Api extends ZIOSupport {
 

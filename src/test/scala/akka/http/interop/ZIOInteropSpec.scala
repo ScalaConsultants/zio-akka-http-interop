@@ -29,32 +29,32 @@ object ZIOInteropSpec extends ZIORouteTest {
 
   private val specs: Spec[Any, TestFailure[Throwable], TestSuccess] =
     suite("ZIO Interop routes")(
-      testM("succeed on /ok") {
-        ZIO.effect(Get("/ok") ~> domainRoutes ~> check {
+      test("succeed on /ok") {
+        ZIO.attempt(Get("/ok") ~> domainRoutes ~> check {
           val s = status
           assert(s)(equalTo(StatusCodes.OK))
         })
       },
-      testM("fail with 500 on /internal_server_error") {
-        ZIO.effect(Get("/internal_server_error") ~> domainRoutes ~> check {
+      test("fail with 500 on /internal_server_error") {
+        ZIO.attempt(Get("/internal_server_error") ~> domainRoutes ~> check {
           val s = status
           assert(s)(equalTo(StatusCodes.InternalServerError))
         })
       },
-      testM("fail with 400 on /bad_request") {
-        ZIO.effect(Get("/bad_request") ~> domainRoutes ~> check {
+      test("fail with 400 on /bad_request") {
+        ZIO.attempt(Get("/bad_request") ~> domainRoutes ~> check {
           val s = status
           assert(s)(equalTo(StatusCodes.BadRequest))
         })
       },
-      testM("succeed fail with 500 on /task (no domain errors)") {
-        ZIO.effect(Get("/task") ~> simpleRoutes ~> check {
+      test("succeed fail with 500 on /task (no domain errors)") {
+        ZIO.attempt(Get("/task") ~> simpleRoutes ~> check {
           val s = status
           assert(s)(equalTo(StatusCodes.InternalServerError))
         })
       },
-      testM("succeed on /uio (no domain errors)") {
-        ZIO.effect(Get("/uio") ~> simpleRoutes ~> check {
+      test("succeed on /uio (no domain errors)") {
+        ZIO.attempt(Get("/uio") ~> simpleRoutes ~> check {
           val s = status
           assert(s)(equalTo(StatusCodes.OK))
         })
