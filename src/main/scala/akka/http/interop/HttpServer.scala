@@ -5,26 +5,29 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
 import zio._
 
+trait HttpServer  {
+  def start: ZIO[Scope, Throwable, Http.ServerBinding]
+}
 object HttpServer {
 
-  trait Service {
-    def start: Managed[Throwable, Http.ServerBinding]
-  }
-
-  val live: ZLayer[Has[ActorSystem] with Has[Config] with Has[Route], Nothing, HttpServer] =
-    ZLayer.fromServices[ActorSystem, Config, Route, HttpServer.Service] { (sys, cfg, routes) =>
-      new Service {
+  val live: ZLayer[ActorSystem with Config with Route, Nothing, HttpServer] =
+    ZLayer {
+      for {
+        sys    <- ZIO.service[ActorSystem]
+        cfg    <- ZIO.service[Config]
+        routes <- ZIO.service[Route]
+      } yield new HttpServer {
         implicit val system: ActorSystem = sys
 
-        val start: Managed[Throwable, Http.ServerBinding] =
-          ZManaged.make(ZIO.fromFuture(_ => Http().newServerAt(cfg.host, cfg.port).bind(routes)))(b =>
+        val start: ZIO[Scope, Throwable, Http.ServerBinding] =
+          ZIO.acquireRelease(ZIO.fromFuture(_ => Http().newServerAt(cfg.host, cfg.port).bind(routes)))(b =>
             ZIO.fromFuture(_ => b.unbind()).orDie
           )
       }
     }
 
-  def start: ZManaged[HttpServer, Throwable, Http.ServerBinding] =
-    ZManaged.accessManaged[HttpServer](_.get.start)
+  def start: ZIO[Scope with HttpServer, Throwable, Http.ServerBinding] =
+    ZIO.serviceWithZIO[HttpServer](_.start)
 
   final case class Config(host: String, port: Int)
 }

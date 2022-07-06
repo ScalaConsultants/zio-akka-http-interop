@@ -4,7 +4,7 @@ import akka.http.scaladsl.marshalling.{ Marshaller, Marshalling, PredefinedToRes
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RouteResult.Complete
 import akka.http.scaladsl.server.{ RequestContext, Route, RouteResult }
-import zio.{ BootstrapRuntime, IO, UIO }
+import zio._
 
 import scala.concurrent.{ Future, Promise }
 import scala.language.implicitConversions
@@ -19,17 +19,19 @@ trait ZIOSupportInstances1 extends ZIOSupportInstances2 {
     ma: Marshaller[A, HttpResponse]
   ): Marshaller[UIO[A], HttpResponse] =
     Marshaller { implicit ec => a =>
-      val r = a.flatMap(a => IO.fromFuture(implicit ec => ma(a)))
+      val r = a.flatMap(a => ZIO.fromFuture(implicit ec => ma(a)))
 
       val p = Promise[List[Marshalling[HttpResponse]]]()
 
-      unsafeRunAsync(r)(_.fold(e => p.failure(e.squash), s => p.success(s)))
+      Unsafe.unsafe { implicit u =>
+        Runtime.default.unsafe.fork(r.foldCause(e => p.failure(e.squash), s => p.success(s)))
+      }
 
       p.future
     }
 }
 
-trait ZIOSupportInstances2 extends BootstrapRuntime {
+trait ZIOSupportInstances2 {
   implicit def zioSupportErrorMarshaller[E: ErrorResponse]: Marshaller[E, HttpResponse] =
     Marshaller { implicit ec => a =>
       PredefinedToResponseMarshallers.fromResponse(implicitly[ErrorResponse[E]].toHttpResponse(a))
@@ -40,14 +42,16 @@ trait ZIOSupportInstances2 extends BootstrapRuntime {
     me: Marshaller[E, HttpResponse]
   ): Marshaller[IO[E, A], HttpResponse] =
     Marshaller { implicit ec => a =>
-      val r = a.foldM(
-        e => IO.fromFuture(implicit ec => me(e)),
-        a => IO.fromFuture(implicit ec => ma(a))
+      val r = a.foldZIO(
+        e => ZIO.fromFuture(implicit ec => me(e)),
+        a => ZIO.fromFuture(implicit ec => ma(a))
       )
 
       val p = Promise[List[Marshalling[HttpResponse]]]()
 
-      unsafeRunAsync(r)(_.fold(e => p.failure(e.squash), s => p.success(s)))
+      Unsafe.unsafe { implicit u =>
+        Runtime.default.unsafe.fork(r.foldCause(e => p.failure(e.squash), s => p.success(s)))
+      }
 
       p.future
     }
@@ -60,7 +64,9 @@ trait ZIOSupportInstances2 extends BootstrapRuntime {
       a => a
     )
 
-    unsafeRunAsync(f)(_.fold(e => p.failure(e.squash), s => p.completeWith(s.apply(ctx))))
+    Unsafe.unsafe { implicit u =>
+      Runtime.default.unsafe.fork(f.foldCause(e => p.failure(e.squash), s => p.completeWith(s.apply(ctx))))
+    }
 
     p.future
   }
