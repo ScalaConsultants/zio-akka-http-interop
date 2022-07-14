@@ -33,5 +33,11 @@ object Api extends ZIOSupport {
           val res: IO[DomainError, String] = ZIO.fail(BadData)
           complete(res)
         }
+      } ~
+      pathPrefix("bad_request_narrow") {
+        get {
+          val res: IO[BadData.type, String] = ZIO.fail(BadData)
+          complete(res)
+        }
       }
 }
