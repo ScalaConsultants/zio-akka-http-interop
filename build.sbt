@@ -30,7 +30,7 @@ val publishSettings = Seq(
   licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   scmInfo := Some(
     ScmInfo(
       url("https://github.com/ScalaConsultants/zio-akka-http-interop"),
