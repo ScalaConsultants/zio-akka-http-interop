@@ -1,20 +1,22 @@
-val zioVersion      = "2.0.0"
+val zioVersion      = "2.0.4"
 val akkaVersion     = "2.6.19"
 val akkaHttpVersion = "10.2.9"
 
-inThisBuild(List(
-  organization := "io.scalac",
-  homepage := Some(url("https://github.com/ScalaConsultants/zio-akka-http-interop")),
-  licenses := List("MIT" -> url("https://opensource.org/licenses/MIT")),
-  developers := List(
-    Developer(
-      id = "jczuchnowski",
-      name = "Jakub Czuchnowski",
-      email = "jakub.czuchnowski@gmail.com",
-      url = url("https://github.com/jczuchnowski")
+inThisBuild(
+  List(
+    organization := "io.scalac",
+    homepage     := Some(url("https://github.com/ScalaConsultants/zio-akka-http-interop")),
+    licenses     := List("MIT" -> url("https://opensource.org/licenses/MIT")),
+    developers   := List(
+      Developer(
+        id = "jczuchnowski",
+        name = "Jakub Czuchnowski",
+        email = "jakub.czuchnowski@gmail.com",
+        url = url("https://github.com/jczuchnowski")
+      )
     )
   )
-))
+)
 
 val compilerOptions = Seq(
   "-deprecation",
@@ -33,8 +35,8 @@ val compilerOptions = Seq(
 
 val root = (project in file("."))
   .settings(
-    name := "zio-akka-http-interop",
-    scalaVersion := "2.13.8",
+    name               := "zio-akka-http-interop",
+    scalaVersion       := "2.13.8",
     crossScalaVersions := Seq("2.12.16", "2.13.8"),
     scalacOptions ++= {
       if (priorTo2_13(scalaVersion.value)) compilerOptions
@@ -45,7 +47,7 @@ val root = (project in file("."))
           case other                  => Seq(other)
         }
     },
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
+    testFrameworks     := Seq(new TestFramework("zio.test.sbt.ZTestFramework")),
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-actor"          % akkaVersion     % Provided,
       "com.typesafe.akka" %% "akka-stream"         % akkaVersion     % Provided,
